@@ -11,6 +11,9 @@ import {
   Text,
   OrderedList
 } from '@chakra-ui/react'
+import TodoList from './components/TodoList'
+import TodoListItem from './components/TodoListItem'
+import EditTodoItem from './components/EditTodoItem'
 import { useState, useEffect } from 'react'
 
 const App = () => {
@@ -169,31 +172,12 @@ const App = () => {
 
 
         {/* Todoリスト */}
-        <OrderedList>
-          {filteredTodos.map(todo => (
-            <ListItem key={todo.id}>
-              <Flex align="center" py="10px"justify="space-between">
-                <Text fontSize="20px">{todo.title}</Text>
-                <HStack
-                  spacing="20px"
-                  align="center"
-                >
-                  <Select
-                    w="100px"
-                    value={todo.status}
-                    onChange={(e) => handleStatusChange(todo, e)}
-                  >
-                    <option value='notStarted'>未着手</option>
-                    <option value='inProgress'>作業中</option>
-                    <option value='done'>完了</option>
-                  </Select>
-                  <Button onClick={() => handleOpenEditForm(todo)}>編集</Button>
-                  <Button colorScheme="pink" onClick={() => handleDeleteTodo(todo)}>削除</Button>
-                </HStack>
-              </Flex>
-            </ListItem>
-          ))}
-        </OrderedList>
+        <TodoList
+          todos={filteredTodos}
+          onChange={handleStatusChange}
+          openEditForm={handleOpenEditForm}
+          deleteTodo={handleDeleteTodo}
+        />
       </Container>
     </>
   )
