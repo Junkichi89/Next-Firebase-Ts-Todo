@@ -3,17 +3,11 @@ import {
   Heading,
   InputGroup,
   Input,
-  Flex,
-  HStack,
   Button,
-  Select,
-  ListItem,
-  Text,
-  OrderedList
 } from '@chakra-ui/react'
 import TodoList from './components/TodoList'
-import TodoListItem from './components/TodoListItem'
-import EditTodoItem from './components/EditTodoItem'
+import NewTodoForm from './components/NewTodoForm'
+import EditTodoForm from './components/EditTodoForm'
 import { useState, useEffect } from 'react'
 
 const App = () => {
@@ -93,6 +87,9 @@ const App = () => {
     )
   }
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value)
+  }
   /** Todoの絞り込みを検値 */
 
   useEffect(() => {
@@ -125,51 +122,27 @@ const App = () => {
         {!isEditable ? (
           /* 新規作成フォーム */
           <>
-            <InputGroup size="md" w="800px" px="20px">
-              <Input
-                type='text'
-                size="md"
-                w="200px"
-                mr="20px"
-                label='タイトル'
-                placeholder="Enter Things to do"
-                value={todoTitle}
-                onChange={handleAddFormChanges}
-              />
-              <Button mr="20px" onClick={handleAddTodo}>作成</Button>
-              <Select w="100px" value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value='all'>すべて</option>
-                <option value='notStarted'>未着手</option>
-                <option value='inProgress'>作業中</option>
-                <option value='done'>完了</option>
-              </Select>
-            </InputGroup>
+            <NewTodoForm
+              todoTitle={todoTitle}
+              filter={filter}
+              handleAddFormChanges={handleAddFormChanges}
+              handleAddTodo={handleAddTodo}
+              handleFilterChange={handleFilterChange}
+            />
           </>
         ) : (
           /* 編集フォーム */
           <>
-            <InputGroup w="800px">
-              <Input
-                type='text'
-                size="md"
-                w="200px"
-                mr="20px"
-                label='新しいタイトル'
-                value={newTitle}
-                onChange={handleEditFormChanges}
-              />
-              <Button mr="20px" onClick={handleEditTodo}>編集を保存</Button>
-              <Button mr="20px" onClick={handleCloseEditForm}>キャンセル</Button>
-              <Select w="100px" value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value='all'>すべて</option>
-                <option value='notStarted'>未着手</option>
-                <option value='inProgress'>作業中</option>
-                <option value='done'>完了</option>
-              </Select>
-            </InputGroup>
+            <EditTodoForm
+              newTitle={newTitle}
+              filter={filter}
+              handleEditFormChanges={handleEditFormChanges}
+              handleEditTodo={handleEditTodo}
+              handleCloseEditForm={handleCloseEditForm}
+              handleFilterChange={handleFilterChange}
+            />
           </>
         )}
-
 
         {/* Todoリスト */}
         <TodoList
