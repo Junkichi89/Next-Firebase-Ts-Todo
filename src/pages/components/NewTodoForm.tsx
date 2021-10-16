@@ -4,8 +4,29 @@ import {
   Button,
 } from '@chakra-ui/react'
 import FilteringSelector from '../components/FilteringSelector'
+import { useState } from 'react'
+import { useRecoilState } from 'recoil'
+import  { todosState } from '../atoms/atom'
 
-const NewTodoForm = ({ todoTitle, filter, handleAddFormChanges, handleAddTodo, handleFilterChange }) => {
+const NewTodoForm = () => {
+
+  const [todoTitle, setTodoTitle] = useState('')
+  const [todos, setTodos] = useRecoilState(todosState)
+  const handleAddFormChanges = (e) => {
+    setTodoTitle(e.target.value)
+  }
+
+  const resetFormInput = () => {
+    setTodoTitle('')
+  }
+
+  const handleAddTodo = () => {
+    setTodos([
+      ...todos,
+      { id: todos.length, title: todoTitle, status: 'notStarted' },
+    ])
+    resetFormInput()
+  }
 
   return (
     <>
@@ -21,7 +42,7 @@ const NewTodoForm = ({ todoTitle, filter, handleAddFormChanges, handleAddTodo, h
           onChange={handleAddFormChanges}
         />
         <Button mr="20px" onClick={handleAddTodo}>作成</Button>
-        <FilteringSelector filter={filter} onChange={handleFilterChange} />
+        <FilteringSelector />
       </InputGroup>
     </>
   )

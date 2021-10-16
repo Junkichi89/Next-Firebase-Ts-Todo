@@ -1,10 +1,17 @@
 import { Select } from '@chakra-ui/react'
+import { todosFilter } from '../atoms/atom'
+import { useRecoilState } from 'recoil'
 
-const FilteringSelector = ({ filter, onChange }) => {
+const FilteringSelector = () => {
 
+  const [filter, setFilter] = useRecoilState(todosFilter)
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value)
+  }
   return (
     <>
-      <Select w="100px" value={filter} onChange={onChange}>
+      <Select w="100px" value={filter} onChange={handleFilterChange}>
         <option value='all'>すべて</option>
         <option value='notStarted'>未着手</option>
         <option value='inProgress'>作業中</option>

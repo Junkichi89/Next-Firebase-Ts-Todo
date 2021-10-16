@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react'
 import FilteringSelector from '../components/FilteringSelector'
 
-const NewTodoForm = ({ newTitle, filter, handleEditFormChanges, handleEditTodo, handleCloseEditForm, handleFilterChange }) => {
+const EditTodoForm = ({ newTitle, handleEditFormChanges, handleEditTodo, handleCloseEditForm　}) => {
 
   return (
     <>
@@ -21,10 +21,10 @@ const NewTodoForm = ({ newTitle, filter, handleEditFormChanges, handleEditTodo, 
         />
         <Button mr="20px" onClick={handleEditTodo}>編集を保存</Button>
         <Button mr="20px" onClick={handleCloseEditForm}>キャンセル</Button>
-        <FilteringSelector filter={filter} onChange={handleFilterChange} />
+        <FilteringSelector　/>
       </InputGroup>
     </>
   )
 }
 
-export default NewTodoForm
+export default EditTodoForm
