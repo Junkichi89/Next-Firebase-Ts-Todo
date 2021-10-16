@@ -4,11 +4,11 @@ import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'reco
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider>
-      <RecoilRoot>
+    <RecoilRoot>
+      <ChakraProvider>
         <Component {...pageProps} />
-      </RecoilRoot>
-    </ChakraProvider>
+      </ChakraProvider>
+    </RecoilRoot>
   )
 }
 
