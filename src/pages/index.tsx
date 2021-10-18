@@ -7,22 +7,30 @@ import NewTodoForm from './components/NewTodoForm'
 import EditTodoForm from './components/EditTodoForm'
 import { useRecoilState } from 'recoil'
 import { todosState } from './atoms/atom'
-import { useState } from 'react'
+import React, { useEffect, useState, } from 'react'
 
-const App = () => {
+import { db } from '../lib/firebase'
+import { collection, query, onSnapshot } from 'firebase/firestore'
+
+interface Todo {
+  id?: number
+  title: string
+  status: string
+}
+
+const App: React.FC = (props: any) => {
   /** Todoリスト */
   const [todos, setTodos] = useRecoilState(todosState)
   const [isEditable, setIsEditable] = useState(false)
-  const [editId, setEditId] = useState()
+  const [editId, setEditId] = useState<number | null>()
   const [newTitle, setNewTitle] = useState('')
 
-
-  const handleEditFormChanges = (e) => {
+  const handleEditFormChanges: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setNewTitle(e.target.value)
   }
 
   /** 編集フォーム表示 */
-  const handleOpenEditForm = ({ id, title }) => {
+  const handleOpenEditForm = ({ id, title }: Todo) => {
     setIsEditable(true)
     setEditId(id)
     setNewTitle(title)
@@ -31,7 +39,7 @@ const App = () => {
   /** 編集フォームを閉じる */
   const handleCloseEditForm = () => {
     setIsEditable(false)
-    setEditId()
+    setEditId(null)
   }
 
   /** Todo編集 */
@@ -43,8 +51,22 @@ const App = () => {
     ))
     setNewTitle('')
     handleCloseEditForm()
-    setEditId()
+    setEditId(null)
   }
+
+  useEffect(() => {
+
+    const q = query(collection(db, 'todos'))
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const newTodos = snapshot.docs.map((doc) => ({
+        id: doc.id, title: doc.data().title , status: doc.data().status
+      }))
+      setTodos(newTodos)
+    })
+    return () => unsub()
+
+  }, [])
 
   return (
     <>
