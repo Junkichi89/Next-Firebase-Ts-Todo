@@ -1,11 +1,17 @@
 import { selector } from 'recoil'
+import { todosFilter, todosState } from 'src/atoms/atom'
 
-import { todosFilter, todosState } from './atom'
+interface Todo {
+  id: string
+  title: string
+  status: string
+}
+
 export const filteredTodosState = selector({
   key:'filteredTodosState',
   get: ({get}) => {
-    const filter = get(todosFilter)
-    const list = get(todosState)
+    const filter: string = get(todosFilter)
+    const list :Todo[]= get(todosState)
 
     switch (filter) {
       case 'notStarted':
