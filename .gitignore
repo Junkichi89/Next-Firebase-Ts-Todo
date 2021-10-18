@@ -33,3 +33,4 @@ yarn-error.log*
 # vercel
 .vercel
 firebase-debug.log
+.firebase/hosting.b3V0.cache
