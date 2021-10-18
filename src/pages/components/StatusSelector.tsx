@@ -1,30 +1,33 @@
+import React from 'react'
 import { Select } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
-import { todosState } from '../atoms/atom'
+import { doc, collection, setDoc } from '@firebase/firestore'
+import { db } from 'src/lib/firebase'
 
-const StatusSelector = ({ todo }) => {
+const StatusSelector: React.FC<any> = ({ todo }) => {
 
-  const [todos, setTodos] = useRecoilState(todosState)
-  const handleStatusChange = ({ id }, e) => {
-    const newTodos = todos.map((todo) => ({ ...todo }))
-
-    setTodos(
-      newTodos.map((todo) =>
-        todo.id === id ? { ...todo, status: e.target.value } : todo
-      )
+  const todosRef = collection(db, 'todos')
+  const handleStatusChange = async ({ id }: any, e: React.ChangeEvent<HTMLSelectElement>) => {
+    await setDoc(
+      doc(todosRef, id),
+      {
+        status: e.target.value,
+      },
+      { merge: true }
     )
   }
   return (
     <>
-      <Select
-        w="100px"
-        value={todo.status}
-        onChange={(e) => handleStatusChange(todo, e)}
-      >
-        <option value='notStarted'>未着手</option>
-        <option value='inProgress'>作業中</option>
-        <option value='done'>完了</option>
-      </Select>
+      {todo &&
+        <Select
+          w="100px"
+          value={todo.status}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleStatusChange(todo, e)}
+        >
+          <option value='notStarted'>未着手</option>
+          <option value='inProgress'>作業中</option>
+          <option value='done'>完了</option>
+        </Select>
+      }
     </>
   )
 }

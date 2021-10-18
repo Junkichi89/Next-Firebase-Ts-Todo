@@ -1,36 +1,29 @@
-import {
-  Container,
-  Heading,
-  InputGroup,
-  Input,
-  Flex,
-  HStack,
-  Button,
-  Select,
-  ListItem,
-  Text,
-  OrderedList
-} from '@chakra-ui/react'
+import React from 'react'
+import { HStack, Button } from '@chakra-ui/react'
 import StatusSelector from './StatusSelector'
-import { useRecoilState } from 'recoil'
-import  { todosState } from '../atoms/atom'
+import { deleteDoc } from '@firebase/firestore'
+import { db } from 'src/lib/firebase'
+import { collection, doc } from 'firebase/firestore'
 
-const EditTodoItem = ({ todo, openEditForm }) => {
+const EditTodoItem: React.FC<any> = ({ todo, openEditForm }) => {
 
-  const [todos, setTodos] = useRecoilState(todosState)
-  const handleDeleteTodo = (targetTodo) => {
-    setTodos(todos.filter((todo) => todo !== targetTodo))
+  const todosRef = collection(db, 'todos')
+
+  const handleDeleteTodo = async () => {
+    await deleteDoc(doc(todosRef, todo.id))
   }
   return (
     <>
-      <HStack
-        spacing="20px"
-        align="center"
-      >
-        <StatusSelector todo={todo}/>
-        <Button onClick={() => openEditForm(todo)}>編集</Button>
-        <Button colorScheme="pink" onClick={() => handleDeleteTodo(todo)}>削除</Button>
-      </HStack>
+      {todo &&
+        <HStack
+          spacing="20px"
+          align="center"
+        >
+          <StatusSelector todo={todo} />
+          <Button onClick={() => openEditForm(todo)}>編集</Button>
+          <Button colorScheme="pink" onClick={handleDeleteTodo}>削除</Button>
+        </HStack>
+      }
     </>
   )
 }

@@ -1,12 +1,12 @@
 import { Select } from '@chakra-ui/react'
-import { todosFilter } from '../atoms/atom'
 import { useRecoilState } from 'recoil'
+import { todosFilter } from 'src/atoms/atom'
 
 const FilteringSelector = () => {
 
   const [filter, setFilter] = useRecoilState(todosFilter)
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(e.target.value)
   }
   return (

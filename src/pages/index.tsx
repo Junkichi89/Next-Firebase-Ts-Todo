@@ -5,25 +5,25 @@ import {
 import TodoList from './components/TodoList'
 import NewTodoForm from './components/NewTodoForm'
 import EditTodoForm from './components/EditTodoForm'
-import { useRecoilState } from 'recoil'
-import { todosState } from './atoms/atom'
+import { useSetRecoilState } from 'recoil'
 import React, { useEffect, useState, } from 'react'
-
 import { db } from '../lib/firebase'
-import { collection, query, onSnapshot } from 'firebase/firestore'
+import { collection, query, onSnapshot, setDoc, doc } from 'firebase/firestore'
+import { todosState } from 'src/atoms/atom'
 
 interface Todo {
-  id?: number
+  id: string
   title: string
   status: string
 }
 
 const App: React.FC = (props: any) => {
   /** Todoリスト */
-  const [todos, setTodos] = useRecoilState(todosState)
+  const setTodos = useSetRecoilState(todosState)
   const [isEditable, setIsEditable] = useState(false)
-  const [editId, setEditId] = useState<number | null>()
+  const [editId, setEditId] = useState('')
   const [newTitle, setNewTitle] = useState('')
+  const todosRef = collection(db, 'todos')
 
   const handleEditFormChanges: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setNewTitle(e.target.value)
@@ -39,19 +39,19 @@ const App: React.FC = (props: any) => {
   /** 編集フォームを閉じる */
   const handleCloseEditForm = () => {
     setIsEditable(false)
-    setEditId(null)
+    setEditId('')
   }
 
   /** Todo編集 */
-  const handleEditTodo = () => {
-    const newTodos = todos.map((todo) => ({ ...todo }))
-
-    setTodos(() => newTodos.map((todo) =>
-      todo.id === editId ? { ...todo, title: newTitle } : todo
-    ))
+  const handleEditTodo = async () => {
+    await setDoc(
+      doc(todosRef, editId),
+      { title: newTitle, },
+      { merge: true }
+    )
     setNewTitle('')
     handleCloseEditForm()
-    setEditId(null)
+    setEditId('')
   }
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const App: React.FC = (props: any) => {
 
     const unsub = onSnapshot(q, (snapshot) => {
       const newTodos = snapshot.docs.map((doc) => ({
-        id: doc.id, title: doc.data().title , status: doc.data().status
+        id: doc.id, title: doc.data().title, status: doc.data().status
       }))
       setTodos(newTodos)
     })

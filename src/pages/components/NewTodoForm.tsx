@@ -4,15 +4,16 @@ import {
   Button,
 } from '@chakra-ui/react'
 import FilteringSelector from '../components/FilteringSelector'
-import { useState } from 'react'
-import { useRecoilState } from 'recoil'
-import  { todosState } from '../atoms/atom'
+import { ChangeEvent, useState } from 'react'
+import { db } from '../../lib/firebase'
+import { addDoc, collection } from 'firebase/firestore'
+
 
 const NewTodoForm = () => {
 
   const [todoTitle, setTodoTitle] = useState('')
-  const [todos, setTodos] = useRecoilState(todosState)
-  const handleAddFormChanges = (e) => {
+
+  const handleAddFormChanges = (e:ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(e.target.value)
   }
 
@@ -20,11 +21,17 @@ const NewTodoForm = () => {
     setTodoTitle('')
   }
 
-  const handleAddTodo = () => {
-    setTodos([
-      ...todos,
-      { id: todos.length, title: todoTitle, status: 'notStarted' },
-    ])
+
+  const handleAddTodo = async () => {
+    await addDoc(collection(db, 'todos'), { title: todoTitle, status: 'notStarted' })
+      .then((docRef) => {
+        console.log(docRef, "NewTodo has been added to Firebase")
+      })
+      .catch((e) => {
+        console.error('Error adding document: ', e)
+      })
+      .finally(() => console.log('finally'))
+
     resetFormInput()
   }
 

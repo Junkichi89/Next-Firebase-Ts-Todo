@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { OrderedList } from '@chakra-ui/react'
 import TodoListItem from '../components/TodoListItem'
-import { filteredTodosState } from '../atoms/selector'
 import { useRecoilValue } from 'recoil'
+import { filteredTodosState } from 'src/atoms/selector'
 
-const TodoList = ({ openEditForm }) => {
+
+const TodoList: React.FC<any> = ({ openEditForm }) => {
 
   const todos = useRecoilValue(filteredTodosState)
+
+
   return (
     <OrderedList>
       {todos.map(todo => (
