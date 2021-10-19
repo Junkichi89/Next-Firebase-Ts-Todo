@@ -2,9 +2,9 @@ import {
   Container,
   Heading,
 } from '@chakra-ui/react'
-import TodoList from './components/TodoList'
-import NewTodoForm from './components/NewTodoForm'
-import EditTodoForm from './components/EditTodoForm'
+import TodoList from '../components/TodoList'
+import NewTodoForm from '../components/NewTodoForm'
+import EditTodoForm from '../components/EditTodoForm'
 import { useSetRecoilState } from 'recoil'
 import React, { useEffect, useState, } from 'react'
 import { db } from '../lib/firebase'
