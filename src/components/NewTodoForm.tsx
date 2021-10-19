@@ -3,9 +3,9 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
-import FilteringSelector from '../components/FilteringSelector'
+import FilteringSelector from './FilteringSelector'
 import { ChangeEvent, useState } from 'react'
-import { db } from '../../lib/firebase'
+import { db } from '../lib/firebase'
 import { addDoc, collection } from 'firebase/firestore'
 
 

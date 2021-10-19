@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { OrderedList } from '@chakra-ui/react'
-import TodoListItem from '../components/TodoListItem'
+import TodoListItem from './TodoListItem'
 import { useRecoilValue } from 'recoil'
 import { filteredTodosState } from 'src/atoms/selector'
 

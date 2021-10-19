@@ -4,7 +4,7 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
-import FilteringSelector from '../components/FilteringSelector'
+import FilteringSelector from './FilteringSelector'
 
 const EditTodoForm :React.FC<any> = ({ newTitle, handleEditFormChanges, handleEditTodo, handleCloseEditForm　}): any => {
 
