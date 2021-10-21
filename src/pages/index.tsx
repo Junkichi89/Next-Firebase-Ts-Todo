@@ -10,6 +10,7 @@ import React, { useEffect, useState, } from 'react'
 import { db } from '../lib/firebase'
 import { collection, query, onSnapshot, setDoc, doc } from 'firebase/firestore'
 import { todosState } from 'src/atoms/atom'
+import { login, logout, useUser } from 'src/lib/auth'
 
 interface Todo {
   id: string
@@ -68,6 +69,19 @@ const App: React.FC = (props: any) => {
 
   }, [])
 
+
+  // ログインサンプル追加
+  const user = useUser();
+
+  const handleLogin = (): void => {
+    login().catch((error) => console.error(error));
+  };
+
+  const handleLogout = (): void => {
+    logout().catch((error) => console.error(error));
+  };
+
+
   return (
     <>
       <Container mt="200px" border="1px solid" borderRadius="5px" p="20px">
@@ -92,6 +106,16 @@ const App: React.FC = (props: any) => {
         {/* Todoリスト */}
         <TodoList openEditForm={handleOpenEditForm} />
       </Container>
+      <div>
+        <h1>Auth Example</h1>
+        {user !== null ? (
+          <h2>ログインしている</h2>
+        ) : (
+          <h2>ログインしていない</h2>
+        )}
+        <button onClick={handleLogin}>ログイン</button>
+        <button onClick={handleLogout}>ログアウト</button>
+      </div>
     </>
   )
 }
