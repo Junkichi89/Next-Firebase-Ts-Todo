@@ -1,8 +1,11 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithRedirect } from "@firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithRedirect, signInWithPopup, UserCredential } from "@firebase/auth"
+import { doc, serverTimestamp } from "@firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
+import { setDoc } from "firebase/firestore"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { atom, useRecoilValue, useSetRecoilState } from "recoil"
-import { auth } from "./firebase"
+import { auth, db } from "./firebase"
 
 type UserState = any | null
 
@@ -12,28 +15,19 @@ const userState = atom<UserState>({
   dangerouslyAllowMutability: true,
 })
 
-export const login = (): Promise<void> => {
-  const provider = new GoogleAuthProvider()
-  return signInWithRedirect(auth, provider)
+export const login = async (email: string, password: string): Promise<void> => {
+  await signInWithEmailAndPassword(auth, email, password)
 }
 
 export const logout = (): Promise<void> => {
   return signOut(auth)
 }
 
-export const signup = async (email, password): Promise<any> => {
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-
-  console.log(userCredential)
-  //     .then((userCredential) => {
-  //       const user = userCredential.user
-  //       console.log(user)
-  //     })
-  //     .catch((error) => {
-  //       const errorCode = error.code
-  //       const errorMessage = error.message
-  //       console.error(errorCode, errorMessage)
-  //     })
+export const signup = async (email: string, password: string, username: string): Promise<any> => {
+  await createUserWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
+    const user = userCredential.user
+    await setDoc(doc(db, 'users', user.uid), { id: user.uid, displayName: username, created_at: serverTimestamp() })
+  })
 }
 
 export const useAuth = (): boolean => {
@@ -41,7 +35,7 @@ export const useAuth = (): boolean => {
   const setUser = useSetRecoilState(userState)
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
+    return onAuthStateChanged(auth, async (user) => {
       setUser(user)
       setIsLoading(false)
     })
