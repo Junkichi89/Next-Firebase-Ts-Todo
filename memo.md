@@ -50,6 +50,14 @@ todo=の部分はコンポーネント側で呼び出す際に使用する。
 JSX内でuseStateを使用してしまうとコンポーネント化した時に切り分けることができなくなってしまうので注意が必要となる。
 
 
+##コンポーネントに関して
+
+一つ複雑で使い回しができるコンポーネントを作成してしまえば、
+全体的にそれを使い回すことで効率化を図ることができる。
+また、機能などもcrudを最低限作成しておけばそれを編集するだけで簡単に作れるので
+最小限のcrud機能と様々なページで役に立つコンポーネントの実装が最優先でいいかもしれない。
+
+
 
 #### 公式ドキュメントを参照（コンポーネントと props）
 https://ja.reactjs.org/docs/components-and-props.html
@@ -72,6 +80,19 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 yarn add @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
 ```
 
+
+## Formの実装について
+
+Formilkを使用
+Chakra-uiとの相性もよく、簡単に実装でき、また、yupを使うことでバリデーションも簡単に実装できてしまうので、なかなか便利
+
+
+## ログイン後のページ遷移については
+
+useRouterを使用して
+ログインしたら任意のページに遷移するように設定
+
+https://techblg.app/articles/how-to-transfer-to-different-page-without-link/
 #### 公式ドキュメントのTS参照
 https://nextjs.org/docs/basic-features/typescript
 
@@ -82,5 +103,9 @@ https://zenn.dev/a_da_chi/articles/181ea4ccc39580
 
 - Chakra UI ドキュメント
 https://chakra-ui.com/docs/getting-started
+
+- Formilk 公式ドキュメント
+
+https://formik.org/docs/tutorial
 
 
