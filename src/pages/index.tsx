@@ -1,3 +1,4 @@
+// ユーザー一覧を表示させる　
 import {
   Button,
   Container,
@@ -5,14 +6,12 @@ import {
   Heading,
 } from '@chakra-ui/react'
 import TodoList from '../components/TodoList'
-import NewTodoForm from '../components/NewTodoForm'
-import EditTodoForm from '../components/EditTodoForm'
 import { useSetRecoilState } from 'recoil'
 import React, { useEffect, useState, } from 'react'
 import { db } from '../lib/firebase'
-import { collection, query, onSnapshot, setDoc, doc } from 'firebase/firestore'
+import { collection, query, onSnapshot } from 'firebase/firestore'
 import { todosState } from 'src/atoms/atom'
-import { login, logout, useUser } from 'src/lib/auth'
+import { logout, useUser } from 'src/lib/auth'
 import Link from 'next/link'
 
 interface Todo {
@@ -24,38 +23,6 @@ interface Todo {
 const App: React.FC = () => {
   /** Todoリスト */
   const setTodos = useSetRecoilState(todosState)
-  const [isEditable, setIsEditable] = useState<boolean>(false)
-  const [editId, setEditId] = useState('')
-  const [newTitle, setNewTitle] = useState<string>('')
-  const todosRef = collection(db, 'todos')
-
-  const handleEditFormChanges: React.ChangeEventHandler<HTMLInputElement> = (e): void => {
-    setNewTitle(e.target.value)
-  }
-
-  /** 編集フォーム表示 */
-  const handleOpenEditForm = ({ id, title }: Todo): void => {
-    setIsEditable(true)
-    setEditId(id)
-    setNewTitle(title)
-  }
-
-  /** 編集フォームを閉じる */
-  const handleCloseEditForm = (): void => {
-    setIsEditable(false)
-    setEditId('')
-  }
-
-  /** Todo編集 */
-  const handleEditTodo = async (): Promise<void> => {
-    await setDoc(doc(todosRef, editId),
-      { title: newTitle, },
-      { merge: true }
-    )
-    setNewTitle('')
-    handleCloseEditForm()
-    setEditId('')
-  }
 
   useEffect(() => {
 
@@ -63,7 +30,8 @@ const App: React.FC = () => {
 
     const unsub = onSnapshot(q, (snapshot) => {
       const newTodos = snapshot.docs.map((doc) => ({
-        id: doc.id, title: doc.data().title, status: doc.data().status
+        id: doc.id, title: doc.data().title,
+        status: doc.data().status, detail: doc.data().detail
       }))
       setTodos(newTodos)
     })
@@ -74,6 +42,7 @@ const App: React.FC = () => {
 
   // ログインサンプル追加
   const user = useUser()
+  console.log(user?.uid)
 
   const handleLogout = (): void => {
     logout().catch((error) => console.error(error))
