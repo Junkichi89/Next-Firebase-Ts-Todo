@@ -18,35 +18,34 @@ interface Todo {
   status: string
 }
 
-const App: React.FC = (props: any) => {
+const App: React.FC = () => {
   /** Todoリスト */
   const setTodos = useSetRecoilState(todosState)
-  const [isEditable, setIsEditable] = useState(false)
+  const [isEditable, setIsEditable] = useState<boolean>(false)
   const [editId, setEditId] = useState('')
-  const [newTitle, setNewTitle] = useState('')
+  const [newTitle, setNewTitle] = useState<string>('')
   const todosRef = collection(db, 'todos')
 
-  const handleEditFormChanges: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleEditFormChanges: React.ChangeEventHandler<HTMLInputElement> = (e): void => {
     setNewTitle(e.target.value)
   }
 
   /** 編集フォーム表示 */
-  const handleOpenEditForm = ({ id, title }: Todo) => {
+  const handleOpenEditForm = ({ id, title }: Todo): void => {
     setIsEditable(true)
     setEditId(id)
     setNewTitle(title)
   }
 
   /** 編集フォームを閉じる */
-  const handleCloseEditForm = () => {
+  const handleCloseEditForm = (): void => {
     setIsEditable(false)
     setEditId('')
   }
 
   /** Todo編集 */
-  const handleEditTodo = async () => {
-    await setDoc(
-      doc(todosRef, editId),
+  const handleEditTodo = async (): Promise<void> => {
+    await setDoc(doc(todosRef, editId),
       { title: newTitle, },
       { merge: true }
     )
@@ -65,59 +64,54 @@ const App: React.FC = (props: any) => {
       }))
       setTodos(newTodos)
     })
-    return () => unsub()
+return () => unsub()
 
   }, [])
 
 
-  // ログインサンプル追加
-  const user = useUser();
+// ログインサンプル追加
+const user = useUser()
 
-  const handleLogin = (): void => {
-    login().catch((error) => console.error(error));
-  };
-
-  const handleLogout = (): void => {
-    logout().catch((error) => console.error(error));
-  };
+const handleLogout = (): void => {
+  logout().catch((error) => console.error(error))
+}
 
 
-  return (
-    <>
-      <Container mt="200px" border="1px solid" borderRadius="5px" p="20px">
-        <Heading pb="20px">Next Todo</Heading>
-        {!isEditable ? (
-          /* 新規作成フォーム */
-          <>
-            <NewTodoForm />
-          </>
-        ) : (
-          /* 編集フォーム */
-          <>
-            <EditTodoForm
-              newTitle={newTitle}
-              handleEditFormChanges={handleEditFormChanges}
-              handleEditTodo={handleEditTodo}
-              handleCloseEditForm={handleCloseEditForm}
-            />
-          </>
-        )}
+return (
+  <>
+    <Container mt="200px" border="1px solid" borderRadius="5px" p="20px">
+      <Heading pb="20px">Next Todo</Heading>
+      {!isEditable ? (
+        /* 新規作成フォーム */
+        <>
+          <NewTodoForm />
+        </>
+      ) : (
+        /* 編集フォーム */
+        <>
+          <EditTodoForm
+            newTitle={newTitle}
+            handleEditFormChanges={handleEditFormChanges}
+            handleEditTodo={handleEditTodo}
+            handleCloseEditForm={handleCloseEditForm}
+          />
+        </>
+      )}
 
-        {/* Todoリスト */}
-        <TodoList openEditForm={handleOpenEditForm} />
-      </Container>
-      <div>
-        <h1>Auth Example</h1>
-        {user !== null ? (
-          <h2>ログインしている</h2>
-        ) : (
-          <h2>ログインしていない</h2>
-        )}
-        <button onClick={handleLogin}>ログイン</button>
-        <button onClick={handleLogout}>ログアウト</button>
-      </div>
-    </>
-  )
+      {/* Todoリスト */}
+      <TodoList openEditForm={handleOpenEditForm} />
+    </Container>
+    <div>
+      <h1>Auth Example</h1>
+      {user !== null ? (
+        <h2>ログインしている</h2>
+      ) : (
+        <h2>ログインしていない</h2>
+      )}
+      <button onClick={handleLogout}>ログアウト</button>
+    </div>
+  </>
+)
 }
 
 export default App

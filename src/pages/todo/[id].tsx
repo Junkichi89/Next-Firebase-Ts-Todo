@@ -10,9 +10,6 @@ interface PathParams {
   id: string
 }
 
-// ページコンポーネントに渡される props の型
-// (Note) ページコンポーネント用の props であることを意識するために、
-// 一般的な Props ではなく、PageProps という名前にしています。
 interface Todo {
   id: string
   title: string
@@ -48,13 +45,14 @@ export const getStaticProps = async (context: { params: { id: any } }) => {
 }
 
 
-const Todo: React.FC = ({ id }) => {
+const Todo = ({ id }:any) => {
 
   const [todos, setTodos] = useRecoilState(todosState)
   const item = todos.filter((todo) => todo.id === id)
   console.log(todos)
   return (
-    item.map(todo => (<>
+    item.map(todo => (
+    <>
       <div key="todo.id">{todo.title}</div>
     </>
     )
