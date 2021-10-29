@@ -1,5 +1,7 @@
 import {
+  Button,
   Container,
+  Flex,
   Heading,
 } from '@chakra-ui/react'
 import TodoList from '../components/TodoList'
@@ -11,6 +13,7 @@ import { db } from '../lib/firebase'
 import { collection, query, onSnapshot, setDoc, doc } from 'firebase/firestore'
 import { todosState } from 'src/atoms/atom'
 import { login, logout, useUser } from 'src/lib/auth'
+import Link from 'next/link'
 
 interface Todo {
   id: string
@@ -64,54 +67,45 @@ const App: React.FC = () => {
       }))
       setTodos(newTodos)
     })
-return () => unsub()
+    return () => unsub()
 
   }, [])
 
 
-// ログインサンプル追加
-const user = useUser()
+  // ログインサンプル追加
+  const user = useUser()
 
-const handleLogout = (): void => {
-  logout().catch((error) => console.error(error))
-}
+  const handleLogout = (): void => {
+    logout().catch((error) => console.error(error))
+  }
 
 
-return (
-  <>
-    <Container mt="200px" border="1px solid" borderRadius="5px" p="20px">
-      <Heading pb="20px">Next Todo</Heading>
-      {!isEditable ? (
-        /* 新規作成フォーム */
-        <>
-          <NewTodoForm />
-        </>
-      ) : (
-        /* 編集フォーム */
-        <>
-          <EditTodoForm
-            newTitle={newTitle}
-            handleEditFormChanges={handleEditFormChanges}
-            handleEditTodo={handleEditTodo}
-            handleCloseEditForm={handleCloseEditForm}
-          />
-        </>
-      )}
-
-      {/* Todoリスト */}
-      <TodoList openEditForm={handleOpenEditForm} />
-    </Container>
-    <div>
-      <h1>Auth Example</h1>
-      {user !== null ? (
-        <h2>ログインしている</h2>
-      ) : (
-        <h2>ログインしていない</h2>
-      )}
-      <button onClick={handleLogout}>ログアウト</button>
-    </div>
-  </>
-)
+  return (
+    <>
+      <Container mt="200px" border="1px solid" borderRadius="5px" p="20px">
+        <Flex justify="space-between" align="center" pb="20px">
+          <Heading>Next Todo</Heading>
+          <Link href="/create" passHref>
+            <Button bg="lightblue">
+              <a>
+                作成
+              </a>
+            </Button>
+          </Link>
+        </Flex>
+        <TodoList />
+      </Container>
+      <div>
+        <h1>Auth Example</h1>
+        {user !== null ? (
+          <h2>ログインしている</h2>
+        ) : (
+          <h2>ログインしていない</h2>
+        )}
+        <button onClick={handleLogout}>ログアウト</button>
+      </div>
+    </>
+  )
 }
 
 export default App
