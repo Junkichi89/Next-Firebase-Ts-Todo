@@ -8,9 +8,9 @@ type Props = {
   children: JSX.Element
 }
 
-const Auth = ({ children }: Props):JSX.Element => {
-  const isLoading = useAuth();
-  return isLoading ? <p>Loading...</p> : children;
+const Auth = ({ children }: Props): JSX.Element => {
+  const isLoading = useAuth()
+  return isLoading ? <p>Loading...</p> : children
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -18,9 +18,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <ChakraProvider>
-        {/* <Auth> */}
-        <Component {...pageProps} />
-        {/* </Auth> */}
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
       </ChakraProvider>
     </RecoilRoot>
   )
