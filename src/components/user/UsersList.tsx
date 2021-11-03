@@ -12,7 +12,7 @@ const UsersList: React.FC<any> = ({ users }: any) => {
 
   return (
     <OrderedList>
-      {users.map(user => (
+      {users.map((user:any) => (
         <UsersListItem user={user} key={user.id} />
       ))}
 

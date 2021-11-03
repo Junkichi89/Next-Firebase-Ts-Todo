@@ -16,7 +16,7 @@ interface FormData {
   detail: string
 }
 
-const EditForm = ({ todo }) => {
+const EditForm:React.FC<any> = ({ todo }) => {
   const todosRef = collection(db, 'todos')
   const router = useRouter()
   const { register, handleSubmit } = useForm<FormData>()
