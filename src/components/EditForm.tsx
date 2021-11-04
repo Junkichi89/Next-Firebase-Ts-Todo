@@ -29,7 +29,6 @@ const EditForm:React.FC<any> = ({ todo }) => {
     )
     router.push('/')
   }
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
