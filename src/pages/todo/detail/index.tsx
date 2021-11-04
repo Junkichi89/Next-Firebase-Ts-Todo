@@ -1,47 +1,15 @@
 import React, { useEffect } from 'react'
-import { GetStaticPaths, GetStaticProps } from 'next'
 import { query } from '@firebase/firestore'
 import { collection, getDocs, onSnapshot } from 'firebase/firestore'
 import { useRecoilState } from 'recoil'
 import { todosState } from 'src/atoms/atom'
 import { db } from 'src/lib/firebase'
 
-interface PathParams {
-  id: string
-}
 
 interface Todo {
   id: string
   title: string
   status: string
-}
-
-
-
-export const getStaticPaths: GetStaticPaths<any> = async () => {
-
-  const todosRef = collection(db, 'todos')
-
-  const data = await getDocs(todosRef)
-  const paths: any[] = []
-  data.forEach((doc) => {
-    paths.push(`/todo/${doc.id}`)
-  })
-
-  return {
-    paths,
-    fallback: false
-  }
-}
-
-export const getStaticProps = async (context: { params: { id: any } }) => {
-  const id = context.params.id
-
-  return {
-    props: {
-      id: id,
-    },
-  }
 }
 
 
