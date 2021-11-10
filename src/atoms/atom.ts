@@ -8,6 +8,7 @@ interface Todo {
   title: string
   status: string
   detail: string
+  uid?: string
 }
 
 
