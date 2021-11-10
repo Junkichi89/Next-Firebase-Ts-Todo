@@ -5,6 +5,8 @@ interface Todo {
   id: string
   title: string
   status: string
+  detail: string
+  uid?: string
 }
 
 export const filteredTodosState = selector({
