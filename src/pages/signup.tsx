@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { Box, Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react'
 import { signup } from 'src/lib/auth'
 import { useRouter } from "next/router"
+import { getAuth } from '@firebase/auth'
+import { updateProfile } from 'firebase/auth'
 
 
 interface FormData {
@@ -31,12 +33,12 @@ const SignupForm: React.FC<void> = () => {
           <label>Email Address</label>
           <Input
             type="email"
-            {...register("email", { required: true})}
+            {...register("email", { required: true })}
           />
           <label>password</label>
           <Input
             type="password"
-            {...register("password", { required: true})}
+            {...register("password", { required: true })}
           />
           <Button bg={'lightBlue'} type="submit">Submit</Button>
         </VStack>

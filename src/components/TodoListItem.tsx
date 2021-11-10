@@ -10,6 +10,8 @@ import {
 import { deleteDoc } from '@firebase/firestore'
 import { collection, doc } from 'firebase/firestore'
 import { db } from 'src/lib/firebase'
+import { useUser } from 'src/lib/auth'
+import StatusSelector from './StatusSelector'
 
 const TodoListItem: React.FC<any> = ({ todo }) => {
 
@@ -17,6 +19,7 @@ const TodoListItem: React.FC<any> = ({ todo }) => {
   const handleDeleteTodo = async () => {
     await deleteDoc(doc(todosRef, todo.id))
   }
+  const user = useUser()
   const router = useRouter()
 
 
@@ -47,6 +50,7 @@ const TodoListItem: React.FC<any> = ({ todo }) => {
                   </a>
                 </Button>
               </Link>
+              <StatusSelector todo={todo}/>
             </Flex>
           </Flex>
         </ListItem>

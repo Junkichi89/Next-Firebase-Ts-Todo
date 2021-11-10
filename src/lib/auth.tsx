@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithRedirect, signInWithPopup, UserCredential } from "@firebase/auth"
 import { doc, serverTimestamp } from "@firebase/firestore"
-import { onAuthStateChanged } from "firebase/auth"
+import { onAuthStateChanged, updateProfile } from "firebase/auth"
 import { setDoc } from "firebase/firestore"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -26,6 +26,10 @@ export const logout = (): Promise<void> => {
 export const signup = async (email: string, password: string, username: string): Promise<any> => {
   await createUserWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
     const user = userCredential.user
+    await await updateProfile(user, {
+      displayName: username
+    }).then(() => console.log("user's displayName updated")).catch((error) => console.error(error))
+
     await setDoc(doc(db, 'users', user.uid), { id: user.uid, displayName: username, created_at: serverTimestamp() })
   })
 }
