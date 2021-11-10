@@ -1,5 +1,4 @@
 import {
-  InputGroup,
   Input,
   Button,
   VStack,

@@ -13,17 +13,12 @@ import { collection, query, onSnapshot } from 'firebase/firestore'
 import { todosState } from 'src/atoms/atom'
 import { logout, useUser } from 'src/lib/auth'
 import Link from 'next/link'
+import FilteringSelector from 'src/components/FilteringSelector'
+import { useRouter } from 'next/router'
 
-interface Todo {
-  id: string
-  title: string
-  status: string
-}
-
-const App: React.FC = () => {
-  /** Todoリスト */
+const Home: React.FC<void> = () => {
   const setTodos = useSetRecoilState(todosState)
-
+  const router = useRouter()
   useEffect(() => {
 
     const q = query(collection(db, 'todos'))
@@ -31,7 +26,7 @@ const App: React.FC = () => {
     const unsub = onSnapshot(q, (snapshot) => {
       const newTodos = snapshot.docs.map((doc) => ({
         id: doc.id, title: doc.data().title,
-        status: doc.data().status, detail: doc.data().detail
+        status: doc.data().status, detail: doc.data().detail, uid: doc.data().uid
       }))
       setTodos(newTodos)
     })
@@ -39,21 +34,20 @@ const App: React.FC = () => {
 
   }, [])
 
-
-  // ログインサンプル追加
   const user = useUser()
-  console.log(user?.uid)
 
-  const handleLogout = (): void => {
-    logout().catch((error) => console.error(error))
+  const handleLogout = async(): Promise<void> => {
+    await logout().catch((error) => console.error(error))
+    router.push('/signin')
   }
 
 
   return (
     <>
-      <Container mt="200px" border="1px solid" borderRadius="5px" p="20px">
+      <Container maxWidth="800px" mt="200px" border="1px solid" borderRadius="5px" p="20px">
         <Flex justify="space-between" align="center" pb="20px">
-          <Heading>Next Todo</Heading>
+          <Heading>{user && user.displayName + "'s"}  Todo</Heading>
+          <FilteringSelector /> 
           <Link href="/create" passHref>
             <Button bg="lightblue">
               <a>
@@ -77,4 +71,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default Home
