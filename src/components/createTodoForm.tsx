@@ -10,6 +10,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { db } from '../lib/firebase'
 import { addDoc, collection } from 'firebase/firestore'
 import { useRouter } from "next/router"
+import { useUser } from 'src/lib/auth'
 
 interface FormData {
   title: string
@@ -17,13 +18,12 @@ interface FormData {
 }
 
 const CreateTodoForm = () => {
-
+  const user = useUser()
   const router = useRouter()
   const { register, handleSubmit } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
-    // 一緒にuserIDもTodoの中に登録させたい。
-    await addDoc(collection(db, 'todos'), { title: data.title, detail: data.detail, status: 'notStarted', uid: 'userID' })
+    await addDoc(collection(db, 'todos'), { title: data.title, detail: data.detail, status: 'notStarted', uid: user.uid })
       .then((docRef) => {
         console.log(docRef, "NewTodo has been added to Firebase")
       })
