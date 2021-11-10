@@ -22,7 +22,6 @@ const EditForm:React.FC<any> = ({ todo }) => {
   const { register, handleSubmit } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
-    // 一緒にuserIDもTodoの中に登録させたい。
     await setDoc(doc(todosRef, todo.id),
       { title: data.title, detail: data.detail },
       { merge: true }
