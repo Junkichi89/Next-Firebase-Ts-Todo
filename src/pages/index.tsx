@@ -59,7 +59,7 @@ const Home: React.FC<void> = () => {
           <Link href="/create" passHref>
             <Button bg="lightblue">
               <a>
-                作成
+                新規作成
               </a>
             </Button>
           </Link>
