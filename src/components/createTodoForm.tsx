@@ -22,7 +22,7 @@ const CreateTodoForm = () => {
   const { register, handleSubmit } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
-    await addDoc(collection(db, 'todos'), { title: data.title, detail: data.detail, status: 'notStarted', uid: user.uid })
+    await addDoc(collection(db, 'todos'), { title: data.title, detail: data.detail, status: 'notStarted', uid: user?.uid })
       .then((docRef) => {
         console.log(docRef, "NewTodo has been added to Firebase")
       })
