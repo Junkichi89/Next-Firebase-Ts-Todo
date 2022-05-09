@@ -15,18 +15,26 @@ import { logout, useUser } from 'src/lib/auth'
 import Link from 'next/link'
 import FilteringSelector from 'src/components/FilteringSelector'
 import { useRouter } from 'next/router'
+import { useRequireLogin } from 'src/hooks/useRequireLogin'
 
 const Home: React.FC<void> = () => {
+
+  
+
   const setTodos = useSetRecoilState(todosState)
   const router = useRouter()
+
   useEffect(() => {
 
     const q = query(collection(db, 'todos'))
 
     const unsub = onSnapshot(q, (snapshot) => {
       const newTodos = snapshot.docs.map((doc) => ({
-        id: doc.id, title: doc.data().title,
-        status: doc.data().status, detail: doc.data().detail, uid: doc.data().uid
+        id: doc.id, 
+        title: doc.data().title,
+        status: doc.data().status, 
+        detail: doc.data().detail, 
+        uid: doc.data().uid
       }))
       setTodos(newTodos)
     })

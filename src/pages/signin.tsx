@@ -16,8 +16,13 @@ const LoginForm: React.FC<void> = () => {
   const router = useRouter()
   const { register, handleSubmit } = useForm<FormData>()
   const onSubmit = async (data: FormData): Promise<void> => {
-    await login(data.email, data.password).catch((error: any) => console.error(error))
-    router.push('/')
+    try {
+      await login(data.email, data.password)
+      router.push('/')
+    } catch (error: any) {
+      console.error(error)
+      router.push('/signup')
+    }
   }
 
   return (

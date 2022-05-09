@@ -6,7 +6,7 @@ import { filteredTodosState } from 'src/atoms/selector'
 import { useUser } from 'src/lib/auth'
 
 
-const TodoList: React.FC<any> = ({ openEditForm }) => {
+const TodoList: React.FC = () => {
 
   const allTodos = useRecoilValue(filteredTodosState)
   const user = useUser()
@@ -15,7 +15,7 @@ const TodoList: React.FC<any> = ({ openEditForm }) => {
   return (
     <OrderedList>
       {userTodos.map(todo => (
-        <TodoListItem todo={todo} key={todo.id} openEditForm={openEditForm} />
+        <TodoListItem todo={todo} key={todo.id} />
       ))}
 
     </OrderedList>
